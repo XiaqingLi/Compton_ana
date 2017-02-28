@@ -1,7 +1,7 @@
 using namespace std;
 
 void Replay_mixcut_hinda_paddle(){
-  gStyle->SetOptStat(0);
+  //  gStyle->SetOptStat(0);
 
   // const string crNames = "ALAINA";
   // const Double_t angles = 40.0;
@@ -26,119 +26,38 @@ void Replay_mixcut_hinda_paddle(){
 
 
 
-  // TH2F *h2D_high = new TH2F(Form("%s_high_cut",crNames.c_str()),
-  // 			    Form("%s_%.0f#circ",crNames.c_str(),angles),
-  // 			    1000,0,200, 2000,0,200);
-  // TH2F *h2D_low = new TH2F(Form("%s_low_cut",crNames.c_str()),
-  // 			   Form("%s_%.0f#circ",crNames.c_str(),angles),
-  // 			   1000,0,200, 2000,0,200);
-  // TH2F *hpad2D_high = new TH2F(Form("paddle_%.0f_high",angles),
-  // 			       Form("paddle_%.0f#circ",angles),
-  // 			       1000,0,200, 2500,0,500);
-  // TH2F *hpad2D_low = new TH2F(Form("paddle_%.0f_low",angles),
-  // 			      Form("paddle_%.0f#circ",angles),
-  // 			      1000,0,200, 2500,0,500);
+  // ====================== make histograms ================================
+  TH2F *hEVpadtof = new TH2F(Form("%s_%.0f_EvPadTof",crNames.c_str(),angles),
+			     Form("%s (%.0f#circ) shield cut",crNames.c_str(),angles),
+			     1800,0,180, 2000,0,200);
+  TH2F *hdEVpadtof1 = new TH2F(Form("%s_%.0f_dEvPadTof1",crNames.c_str(),angles),
+			       Form("%s (%.0f#circ) shield+tof cut",crNames.c_str(),angles),
+			       1000,0,1000, 4000,0,800);
+  TH2F *hdEVpadtof2 = new TH2F(Form("%s_%.0f_dEvPadTof2",crNames.c_str(),angles),
+			       Form("%s (%.0f#circ) shield+tof cut, Ecore>100MeV",crNames.c_str(),angles),
+			       1000,0,1000, 4000,0,800);
+  TH2F *hdEVpadtof3 = new TH2F(Form("%s_%.0f_dEvPadTof3",crNames.c_str(),angles),
+			       Form("%s (%.0f#circ) shield+tof cut, Ecore=[80,100]MeV",crNames.c_str(),angles),
+			       1000,0,1000, 4000,0,800);
+  // TH2F *hdEVpadtof4 = new TH2F(Form("%s_%.0f_dEvPadTof4",crNames.c_str(),angles),
+  // 			       Form("%s (%.0f#circ) shield+tof cut, Ecore=[20,60]MeV",crNames.c_str(),angles),
+  // 			       1000,0,1000, 4000,0,800);
+  TH2F *hdEVpadtof1_rndm = new TH2F(Form("%s_%.0f_dEvPadTof1_rndm",crNames.c_str(),angles),
+				    Form("%s (%.0f#circ) shield cut, random events",crNames.c_str(),angles),
+				    1000,0,1000, 4000,0,800);
+  TH2F *hdEVpadtof2_rndm = new TH2F(Form("%s_%.0f_dEvPadTof2_rndm",crNames.c_str(),angles),
+				    Form("%s (%.0f#circ) shield cut, random events, Ecore>100MeV",crNames.c_str(),angles),
+				    1000,0,1000, 4000,0,800);
+  TH2F *hdEVpadtof3_rndm = new TH2F(Form("%s_%.0f_dEvPadTof3_rndm",crNames.c_str(),angles),
+				    Form("%s (%.0f#circ) shield cut, random events, Ecore=[80,100]MeV",crNames.c_str(),angles),
+				    1000,0,1000, 4000,0,800);
 
-
-  // TH2F *h2D_1 = new TH2F(Form("%s_cut1",crNames.c_str()),
-  // 			 Form("%s_%.0f#circ",crNames.c_str(),angles),
-  // 			 1000,0,200, 2000,0,200);
-  // TH2F *hpad2D_1 = new TH2F(Form("paddle_%.0f_cut1",angles),
-  // 			    Form("paddle_%.0f#circ",angles),
-  // 			    1000,0,200, 2500,0,500);
-  // TH2F *h2D_2 = new TH2F(Form("%s_cut2",crNames.c_str()),
-  // 			 Form("%s_%.0f#circ",crNames.c_str(),angles),
-  // 			 1000,0,200, 2000,0,200);
-  // TH2F *hpad2D_2 = new TH2F(Form("paddle_%.0f_cut2",angles),
-  // 			    Form("paddle_%.0f#circ",angles),
-  // 			    1000,0,200, 2500,0,500);
-  // TH2F *h2D_3 = new TH2F(Form("%s_cut3",crNames.c_str()),
-  // 			 Form("%s_%.0f#circ",crNames.c_str(),angles),
-  // 			 1000,0,200, 2000,0,200);
-  // TH2F *hpad2D_3 = new TH2F(Form("paddle_%.0f_cut3",angles),
-  // 			    Form("paddle_%.0f#circ",angles),
-  // 			    1000,0,200, 2500,0,500);
-  // TH2F *h2D_4 = new TH2F(Form("%s_cut4",crNames.c_str()),
-  // 			 Form("%s_%.0f#circ",crNames.c_str(),angles),
-  // 			 1000,0,200, 2000,0,200);
-  // TH2F *hpad2D_4 = new TH2F(Form("paddle_%.0f_cut4",angles),
-  // 			    Form("paddle_%.0f#circ",angles),
-  // 			    1000,0,200, 2500,0,500);
-  // TH2F *h2D_5 = new TH2F(Form("hinda_%s_TofCut",crNames.c_str()),
-  // 			 Form("hinda_%s_%.0f#circ",crNames.c_str(),angles),
-  // 			 1000,0,200, 2000,0,200);
-  // TH2F *hpad2D_5 = new TH2F(Form("paddle_%.0f_TofCut",angles),
-  // 			    Form("paddle_%.0f#circ",angles),
-  // 			    1000,0,200, 2500,0,500);
-  // TH2F *h2D_6 = new TH2F(Form("hinda_%s_TofShldCut",crNames.c_str()),
-  // 			 Form("hinda_%s_%.0f#circ",crNames.c_str(),angles),
-  // 			 1000,0,200, 2000,0,200);
-  // TH2F *hpad2D_6 = new TH2F(Form("paddle_%.0f_TofShldCut",angles),
-  // 			    Form("paddle_%.0f#circ",angles),
-  // 			    1000,0,200, 2500,0,500);
-   
-
-  // TH2F *hhind_raw = new TH2F(Form("hinda_%s_raw",crNames.c_str()),
-  // 			     Form("hinda_%s_%.0f#circ_no_cut",crNames.c_str(),angles),
-  // 			     1000,0,200, 2000,0,200);
-  // TH2F *hpad_raw = new TH2F(Form("paddle_%.0f_raw",angles),
-  // 			    Form("paddle_%.0f#circ_no_cut",angles),
-  // 			    1000,0,200, 2500,0,500);
-  // TH2F *hhind_tof = new TH2F(Form("hinda_%s_TofCut",crNames.c_str()),
-  // 			     Form("hinda_%s_%.0f#circ_TOF_cut",crNames.c_str(),angles),
-  // 			     1000,0,200, 2000,0,200);
-  // TH2F *hpad_tof = new TH2F(Form("paddle_%.0f_TofCut",angles),
-  // 			    Form("paddle_%.0f#circ_TOF_cut",angles),
-  // 			    1000,0,200, 2500,0,500);
-  // TH2F *hhind_shld = new TH2F(Form("hinda_%s_ShldCut",crNames.c_str()),
-  // 			      Form("hinda_%s_%.0f#circ_shield_cut",crNames.c_str(),angles),
-  // 			      1000,0,200, 2000,0,200);
-  // TH2F *hpad_shld = new TH2F(Form("paddle_%.0f_ShldCut",angles),
-  // 			     Form("paddle_%.0f#circ_shield_cut",angles),
-  // 			     1000,0,200, 2500,0,500);
-  // TH2F *hhind_tofshld = new TH2F(Form("hinda_%s_TofShldCut",crNames.c_str()),
-  // 				 Form("hinda_%s_%.0f#circ_TOF+shield_cut",crNames.c_str(),angles),
-  // 				 1000,0,200, 2000,0,200);
-  // TH2F *hpad_tofshld = new TH2F(Form("paddle_%.0f_TofShldCut",angles),
-  // 				Form("paddle_%.0f#circ_TOF+shield_cut",angles),
-  // 				1000,0,200, 2500,0,500);
-  TH2F *h2D_1cut = new TH2F(Form("%s_%.0f_ShldCut",crNames.c_str(),angles),
-			    Form("%s_%.0f#circ_shield_cut",crNames.c_str(),angles),
-			    1000,0,200, 2000,0,200);
-  TH2F *h2D_2cut = new TH2F(Form("%s_%.0f_ShldPadtofCut",crNames.c_str(),angles),
-			    Form("%s_%.0f#circ_shield+padTOF_cut",crNames.c_str(),angles),
-			    1000,0,200, 2000,0,200);
-    
-  TH1F *h1D_2cuts = new TH1F(Form("%s_TofShldCut",crNames.c_str()),
-			     Form("%s_%.0f#circ_tof+shield_cut",crNames.c_str(),angles),
-			     2000,0,200);
-  TH2F *h2D_2cuts = new TH2F(Form("%s_%.0f_TofShldCut",crNames.c_str(),angles),
-			     Form("%s_%.0f#circ_tof+shield_cut",crNames.c_str(),angles),
-			     1000,0,200, 2000,0,200);
-  
-  TH1F *h1D_3cuts = new TH1F(Form("%s_TofShldPadtofCut",crNames.c_str()),
-			     Form("%s_%.0f#circ_tof+shield+paddleTOF_cut",crNames.c_str(),angles),
-			     2000,0,200);
-  TH2F *h2D_3cuts = new TH2F(Form("%s_%.0f_TofShldPadtofCut",crNames.c_str(),angles),
-			     Form("%s_%.0f#circ_tof+shield+paddleTOF_cut",crNames.c_str(),angles),
-			     1000,0,200, 2000,0,200);
-
-  TH1F *h1D_2cuts_net = new TH1F(Form("%s_TofShldCut_net",crNames.c_str()),
-				 Form("%s_%.0f#circ_tof+shield+rndm_cut",crNames.c_str(),angles),
-				 2000,0,200);
-  TH1F *h1D_3cuts_net = new TH1F(Form("%s_TofShldPadtofCut_net",crNames.c_str()),
-				 Form("%s_%.0f#circ_tof+shield+paddleTOF+rndm_cut",crNames.c_str(),angles),
-				 2000,0,200);
-
-  TH1F *hrand1 = new TH1F(Form("%s_rand",crNames.c_str()),
-			  Form("%s_%.0f#circ_rand",crNames.c_str(),angles),
-			  2000,0,200);
-  TH1F *hrand2 = new TH1F(Form("%s_rand_padtofcut",crNames.c_str()),
-			  Form("%s_%.0f#circ_rand_padTOFcut",crNames.c_str(),angles),
-			  2000,0,200);
+  TH2F *hdEVpadtof1_net,*hdEVpadtof2_net,*hdEVpadtof3_net;
 
 
 
+
+  // ======================== fill histograms ====================================
   ifstream database("run_database.dat");
   char number[20];
   char name[200];
@@ -150,7 +69,7 @@ void Replay_mixcut_hinda_paddle(){
     if(number[0] == hash) continue; //the runs starting with # should be neglected 
     if(mode != "deuterium") continue;//choose run mode "deuterium/empty"
     //if(atoi(number) < 180) continue;//start from this run
-    //if(atoi(number) > 599) break;//end at this run
+    //if(atoi(number) > 600) break;//end at this run
     printf("Current run number: %s  mode: %s\n", number, mode.c_str());
 
     TFile *file = new TFile(Form("./root_files/new/%s",name));
@@ -224,29 +143,50 @@ void Replay_mixcut_hinda_paddle(){
       // 	  hpad_tofshld->Fill(energy,Qpaddle);
       // 	}
       // }
+  
+      if(Qshield<3000.0)
+	hEVpadtof->Fill(tof, energy);
 
-      if(Qshield<3000.0 && tof>75.0 && tof<79.0){
-	h1D_2cuts->Fill(energy);
-	// h2D_2cuts->Fill(tof,energy);
-	if(tof_pad<86 || tof_pad>102){
-	  h1D_3cuts->Fill(energy);
-	  // h2D_3cuts->Fill(tof,energy);
-	}
+      if(Qshield<3000.0 && tof>75.0 && tof<79.0 ){
+	hdEVpadtof1->Fill(tof_pad,Qpaddle);
+	if(energy>100)
+	  hdEVpadtof2->Fill(tof_pad,Qpaddle);
+	if(energy>80 && energy<100)
+	  hdEVpadtof3->Fill(tof_pad,Qpaddle);
+	// if(energy>20 && energy<60)
+	//   hdEVpadtof4->Fill(tof_pad,Qpaddle);
       }
 
-      if(Qshield<3000 && tof>130.0 && tof<170.0){
-	hrand1->Fill(energy);
-	if(tof_pad<86 || tof_pad>102)
-	  hrand2->Fill(energy);
-      }
-
-      if(Qshield<3000.0){
-	h2D_1cut->Fill(tof,energy);
-	if(tof_pad<86 || tof_pad>102)
-	  h2D_2cut->Fill(tof,energy);
+      if(Qshield<3000.0 && tof>130.0 && tof<170.0){
+	hdEVpadtof1_rndm->Fill(tof_pad,Qpaddle);
+	if(energy>100)	
+	  hdEVpadtof2_rndm->Fill(tof_pad,Qpaddle);
+	if(energy>80 && energy<100)
+	  hdEVpadtof3_rndm->Fill(tof_pad,Qpaddle);
       }
 
 
+      //     if(Qshield<3000.0){
+      // 	h2D_1cut->Fill(tof,energy);
+
+      // 	if(tof>75.0 && tof<79.0)
+      // 	h1D_2cuts->Fill(energy);
+    
+      //     // h2D_2cuts->Fill(tof,energy);
+      //     if(tof_pad<86 || tof_pad>102)
+      // 	h1D_3cuts->Fill(energy);
+      // 	// h2D_3cuts->Fill(tof,energy);
+      
+    
+
+      //   if(tof>130.0 && tof<170.0){
+      //   hrand1->Fill(energy);
+      //   if(tof_pad<83 || tof_pad>102)
+      //     hrand2->Fill(energy);
+      // }
+
+      // if(tof_pad<83 || tof_pad>102)
+      //   h2D_2cut->Fill(tof,energy);
 
 
     }//loop over events(i<events)
@@ -256,10 +196,18 @@ void Replay_mixcut_hinda_paddle(){
   database.close();
 
 
-  h1D_2cuts_net = (TH1F*)h1D_2cuts->Clone(Form("%s_TofShldCut_net",crNames.c_str())); 
-  h1D_2cuts_net->Add(hrand1, -1*(79.0-75.0)/(170.0-130.0));
-  h1D_3cuts_net = (TH1F*)h1D_3cuts->Clone(Form("%s_TofShldPadtofCut_net",crNames.c_str())); 
-  h1D_3cuts_net->Add(hrand2, -1*(79.0-75.0)/(170.0-130.0));
+
+  // ========= Do random subtraction ========================
+  hdEVpadtof1_net = (TH2F*)hdEVpadtof1->Clone(Form("%s_%.0f_dEvPadTof1_net",crNames.c_str(),angles)); 
+  hdEVpadtof1_net->SetTitle(Form("%s (%.0f#circ) shield+tof cut net",crNames.c_str(),angles));
+  hdEVpadtof1_net->Add(hdEVpadtof1_rndm, -1*(79.0-75.0)/(170.0-130.0));
+  hdEVpadtof2_net = (TH2F*)hdEVpadtof2->Clone(Form("%s_%.0f_dEvPadTof2_net",crNames.c_str(),angles)); 
+  hdEVpadtof2_net->SetTitle(Form("%s (%.0f#circ) shield+tof cut net, Ecore>100MeV",crNames.c_str(),angles));
+  hdEVpadtof2_net->Add(hdEVpadtof2_rndm, -1*(79.0-75.0)/(170.0-130.0));
+  hdEVpadtof3_net = (TH2F*)hdEVpadtof3->Clone(Form("%s_%.0f_dEvPadTof3_net",crNames.c_str(),angles)); 
+  hdEVpadtof3_net->SetTitle(Form("%s (%.0f#circ) shield cut net, Ecore=[80,100]MeV",crNames.c_str(),angles));
+  hdEVpadtof3_net->Add(hdEVpadtof3_rndm, -1*(79.0-75.0)/(170.0-130.0));
+
 
 
 
@@ -283,120 +231,6 @@ void Replay_mixcut_hinda_paddle(){
   // h2D_1->GetYaxis()->SetTitleSize(0.045);
   // h2D_1->GetYaxis()->SetLabelSize(0.045);
   // h2D_1->Draw("color");
-
-  // TCanvas *c2 = new TCanvas("c2","cut2");
-  // c2->Divide(2,1);
-  // //gPad->SetLogz();
-  // c2->cd(1);
-  // hpad2D_2->GetXaxis()->SetTitle("E [MeV]");
-  // hpad2D_2->GetXaxis()->SetTitleSize(0.045);
-  // hpad2D_2->GetXaxis()->SetLabelSize(0.045);
-  // hpad2D_2->GetYaxis()->SetTitle("#DeltaE");
-  // hpad2D_2->Draw("color");
-  // c2->cd(2);
-  // h2D_2->GetXaxis()->SetTitle("TOF [ns]");
-  // h2D_2->GetXaxis()->SetTitleSize(0.045);
-  // h2D_2->GetXaxis()->SetLabelSize(0.045);
-  // h2D_2->GetYaxis()->SetTitle("E [MeV]");
-  // h2D_2->GetYaxis()->SetTitleSize(0.045);
-  // h2D_2->GetYaxis()->SetLabelSize(0.045);
-  // h2D_2->Draw("color");
-
-  // TCanvas *c3 = new TCanvas("c3","cut3");
-  // c3->Divide(2,1);
-  // //gPad->SetLogz();
-  // c3->cd(1);
-  // hpad2D_3->GetXaxis()->SetTitle("E [MeV]");
-  // hpad2D_3->GetXaxis()->SetTitleSize(0.045);
-  // hpad2D_3->GetXaxis()->SetLabelSize(0.045);
-  // hpad2D_3->GetYaxis()->SetTitle("#DeltaE");
-  // hpad2D_3->Draw("color");
-  // c3->cd(2);
-  // h2D_3->GetXaxis()->SetTitle("TOF [ns]");
-  // h2D_3->GetXaxis()->SetTitleSize(0.045);
-  // h2D_3->GetXaxis()->SetLabelSize(0.045);
-  // h2D_3->GetYaxis()->SetTitle("E [MeV]");
-  // h2D_3->GetYaxis()->SetTitleSize(0.045);
-  // h2D_3->GetYaxis()->SetLabelSize(0.045);
-  // h2D_3->Draw("color");
-
-  // TCanvas *c4 = new TCanvas("c4","cut4");
-  // c4->Divide(2,1);
-  // //gPad->SetLogz();
-  // c4->cd(1);
-  // hpad2D_4->GetXaxis()->SetTitle("E [MeV]");
-  // hpad2D_4->GetXaxis()->SetTitleSize(0.045);
-  // hpad2D_4->GetXaxis()->SetLabelSize(0.045);
-  // hpad2D_4->GetYaxis()->SetTitle("#DeltaE");
-  // hpad2D_4->Draw("color");
-  // c4->cd(2);
-  // h2D_4->GetXaxis()->SetTitle("TOF [ns]");
-  // h2D_4->GetXaxis()->SetTitleSize(0.045);
-  // h2D_4->GetXaxis()->SetLabelSize(0.045);
-  // h2D_4->GetYaxis()->SetTitle("E [MeV]");
-  // h2D_4->GetYaxis()->SetTitleSize(0.045);
-  // h2D_4->GetYaxis()->SetLabelSize(0.045);
-  // h2D_4->Draw("color");
-
-  // TCanvas *c5 = new TCanvas("TofCut","Tof cut");
-  // c5->Divide(2,1);
-  // //gPad->SetLogz();
-  // c5->cd(1);
-  // hpad2D_5->GetXaxis()->SetTitle("E [MeV]");
-  // hpad2D_5->GetXaxis()->SetTitleSize(0.045);
-  // hpad2D_5->GetXaxis()->SetLabelSize(0.045);
-  // hpad2D_5->GetYaxis()->SetTitle("#DeltaE");
-  // hpad2D_5->Draw("color");
-  // c5->cd(2);
-  // h2D_5->GetXaxis()->SetTitle("TOF [ns]");
-  // h2D_5->GetXaxis()->SetTitleSize(0.045);
-  // h2D_5->GetXaxis()->SetLabelSize(0.045);
-  // h2D_5->GetYaxis()->SetTitle("E [MeV]");
-  // h2D_5->GetYaxis()->SetTitleSize(0.045);
-  // h2D_5->GetYaxis()->SetLabelSize(0.045);
-  // h2D_5->Draw("color");
-
-  // TCanvas *c6 = new TCanvas("TofShldCut","Tof+shield cut");
-  // c6->Divide(2,1);
-  // //gPad->SetLogz();
-  // c6->cd(1);
-  // hpad2D_6->GetXaxis()->SetTitle("E [MeV]");
-  // hpad2D_6->GetXaxis()->SetTitleSize(0.045);
-  // hpad2D_6->GetXaxis()->SetLabelSize(0.045);
-  // hpad2D_6->GetYaxis()->SetTitle("#DeltaE");
-  // hpad2D_6->Draw("color");
-  // c6->cd(2);
-  // h2D_6->GetXaxis()->SetTitle("TOF [ns]");
-  // h2D_6->GetXaxis()->SetTitleSize(0.045);
-  // h2D_6->GetXaxis()->SetLabelSize(0.045);
-  // h2D_6->GetYaxis()->SetTitle("E [MeV]");
-  // h2D_6->GetYaxis()->SetTitleSize(0.045);
-  // h2D_6->GetYaxis()->SetLabelSize(0.045);
-  // h2D_6->Draw("color");
-
-  // TCanvas *c1 = new TCanvas("c1","no cut");
-  // gPad->SetLogz();
-  // hpad_raw->GetXaxis()->SetTitle("E [MeV]");
-  // hpad_raw->GetXaxis()->SetTitleSize(0.045);
-  // hpad_raw->GetXaxis()->SetLabelSize(0.045);
-  // hpad_raw->GetYaxis()->SetTitle("#DeltaE");
-  // hpad_raw->Draw("color,colz");
-
-  // TCanvas *c2 = new TCanvas("c2","shield cut");
-  // gPad->SetLogz();
-  // hpad_shld->GetXaxis()->SetTitle("E [MeV]");
-  // hpad_shld->GetXaxis()->SetTitleSize(0.045);
-  // hpad_shld->GetXaxis()->SetLabelSize(0.045);
-  // hpad_shld->GetYaxis()->SetTitle("#DeltaE");
-  // hpad_shld->Draw("color,colz");
-
-  // TCanvas *c3 = new TCanvas("c3","tof cut");
-  // gPad->SetLogz();
-  // hpad_tof->GetXaxis()->SetTitle("E [MeV]");
-  // hpad_tof->GetXaxis()->SetTitleSize(0.045);
-  // hpad_tof->GetXaxis()->SetLabelSize(0.045);
-  // hpad_tof->GetYaxis()->SetTitle("#DeltaE");
-  // hpad_tof->Draw("color,colz");
 
   // TCanvas *c1 = new TCanvas("c1","1D paddle cut comparison w/ TOF+shld+");
   // //gPad->SetLogz();
@@ -431,55 +265,28 @@ void Replay_mixcut_hinda_paddle(){
   // h2D_3cuts->GetYaxis()->SetLabelSize(0.045);
   // h2D_3cuts->Draw("color,colz");
 
+
+
  
 
   // ================ save file =============================
 
-  TFile *outfile = new TFile("test_hinda_75_randsub_padTOFcut_deuterium_new.root","recreate");
-  // hpad2D_1->Write();
-  // h2D_1->Write();
-  // hpad2D_2->Write();
-  // h2D_2->Write();
-  // hpad2D_3->Write();
-  // h2D_3->Write();
-  // hpad2D_4->Write();
-  // h2D_4->Write();
-  // hpad2D_5->Write();
-  // h2D_5->Write();
-  // hpad2D_6->Write();
-  // h2D_6->Write();
-  // c1->Write();
-  // c2->Write();
-  // c3->Write();
-  // c4->Write();
-  // c5->Write();
-  // c6->Write();
+  TFile *outfile = new TFile("test_75_EcoreCutOnPaddle.root","recreate");
 
-  // hhind_raw->Write();
-  // hpad_raw->Write();
-  // hhind_shld->Write();
-  // hpad_shld->Write();
-  // hhind_tof->Write();
-  // hpad_tof->Write();
-  // hhind_tofshld->Write();
-  // hpad_tofshld->Write();
-  // c1->Write();
-  // c2->Write();
-  // c3->Write();
-  // c4->Write();
+  hEVpadtof->Write();
+  hdEVpadtof1->Write();
+  hdEVpadtof2->Write();
+  hdEVpadtof3->Write();
+  hdEVpadtof1_rndm->Write();
+  hdEVpadtof2_rndm->Write();
+  hdEVpadtof3_rndm->Write();
+  hdEVpadtof1_net->Write();
+  hdEVpadtof2_net->Write();
+  hdEVpadtof3_net->Write();
 
-  h1D_2cuts->Write();
-  // h2D_2cuts->Write();
-  h1D_3cuts->Write();
-  // h2D_3cuts->Write();
-  h1D_2cuts_net->Write();
-  h1D_3cuts_net->Write();
-  h2D_1cut->Write();
-  h2D_2cut->Write();
-  // c1->Write();
-  // c2->Write();
-  hrand1->Write();
-  hrand2->Write();
+
+
+
 
   outfile->Close();
 
