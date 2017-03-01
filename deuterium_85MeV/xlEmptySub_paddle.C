@@ -10,9 +10,9 @@ void xlEmptySub_paddle(){
   const int angles[nCores] = {40, 55, 75, 90};
 
 //****change input and output file names here!****
-  TString infile_full = "test_hinda_75_randsub_padTOFcut_LD2_new.root";
-  TString infile_empty = "test_hinda_75_randsub_padTOFcut_empty_new.root";
-  TString outfile = "test_hinda_75_randsub_padTOFcut_net_new.root"; 
+  TString infile_full = "test_75_EcoreCutOnPaddle_LD2.root";
+  TString infile_empty = "test_75_EcoreCutOnPaddle_empty.root";
+  TString outfile = "test_75_EcoreCutOnPaddle_net.root"; 
 //************************************************
 
 
@@ -184,68 +184,84 @@ void xlEmptySub_paddle(){
 
 
   //~~~~~~~~~~~~~~~~~~~~ for single paddle use ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  TH1F *hfull, *hempty, *hempty_scaled, *hsub;
-  TH1F *hfull2, *hempty2, *hempty_scaled2, *hsub2;
-  const Int_t rebin = 10;
+  // TH1F *hfull, *hempty, *hempty_scaled, *hsub;
+  // TH1F *hfull2, *hempty2, *hempty_scaled2, *hsub2;
+  // const Int_t rebin = 10;
 
-  hfull = (TH1F*)ffull->Get("JONI_TofShldCut_net")->Clone("JONI_TofShldCut_net_full");
-  hempty = (TH1F*)fempty->Get("JONI_TofShldCut_net");
-  hempty_scaled = (TH1F*)hempty->Clone("JONI_TofShldCut_netempty_scaled");
-  hempty_scaled->Scale(scale_factor);
-  hsub = (TH1F*)hfull->Clone("JONI_TofShldCut_net_sub");
-  hsub->Add(hempty, -1.0*scale_factor);
-  hsub->Rebin(rebin);
-
-  hfull2 = (TH1F*)ffull->Get("JONI_TofShldPadtofCut_net")->Clone("JONI_TofShldPadtofCut_net_full");
-  hempty2 = (TH1F*)fempty->Get("JONI_TofShldPadtofCut_net");
-  hempty_scaled2 = (TH1F*)hempty2->Clone("JONI_TofShldPadtofCut_net_empty_scaled");
-  hempty_scaled2->Scale(scale_factor);
-  hsub2 = (TH1F*)hfull2->Clone("JONI_TofShldPadtofCut_net_sub");
-  hsub2->Add(hempty2, -1.0*scale_factor);
-  hsub2->Rebin(rebin);
-
-  TCanvas *c1 = new TCanvas("c1","tof+shld cut net (with rand sub)");
-  //gPad->SetLogz();
-  hsub->GetXaxis()->SetRangeUser(20,180);
-  hsub->GetXaxis()->SetTitle("E [MeV]");
-  hsub->GetXaxis()->SetLabelSize(0.045);
-  hsub->GetXaxis()->SetTitleSize(0.045);
-  hsub->GetYaxis()->SetRangeUser(0,550);
-  hsub->GetYaxis()->SetTitle("counts");
-  hsub->GetYaxis()->SetTitleSize(0.045);
-  hsub->GetYaxis()->SetLabelSize(0.045);
-  hsub->SetTitle("JONI_75#circ_tof+shld_cut_random_sub");
-  hsub->SetLineColor(kBlack);
-  hsub->Draw();
-  hsub2->SetFillStyle(3003);
-  hsub2->SetFillColor(kRed+1);
-  hsub2->SetLineColor(kRed+1);
-  hsub2->Draw("same");
-
-  TLegend *l1 = new TLegend(0.5,0.6,0.85,0.75);
-  l1->AddEntry(hsub,"no paddle cut");
-  l1->AddEntry(hsub2,"with paddle TOF cut");
-  l1->Draw();
-
-
-
-  // TH2F *hfull, *hempty, *hempty_scaled, *hsub;
-  // hfull = (TH2F*)ffull->Get("hinda_JONI_Net")->Clone("hinda_75deg_ld2");
-  // hempty = (TH2F*)fempty->Get("hinda_JONI_Net");
-  // hempty_scaled = (TH2F*)hempty->Clone("hinda_75deg_empty_scaled");
+  // hfull = (TH1F*)ffull->Get("JONI_TofShldCut_net")->Clone("JONI_TofShldCut_net_full");
+  // hempty = (TH1F*)fempty->Get("JONI_TofShldCut_net");
+  // hempty_scaled = (TH1F*)hempty->Clone("JONI_TofShldCut_netempty_scaled");
   // hempty_scaled->Scale(scale_factor);
-  // hsub = (TH2F*)hfull->Clone("hinda_75deg_net");
+  // hsub = (TH1F*)hfull->Clone("JONI_TofShldCut_net_sub");
   // hsub->Add(hempty, -1.0*scale_factor);
-  // hsub->SetTitle("hinda_JONI_75#circ_TOF+Shield_cut_w/_Random+Empty_sub");
-  // hsub->GetXaxis()->SetTitle("paddle TOF");
+  // hsub->Rebin(rebin);
+
+  // hfull2 = (TH1F*)ffull->Get("JONI_TofShldPadtofCut_net")->Clone("JONI_TofShldPadtofCut_net_full");
+  // hempty2 = (TH1F*)fempty->Get("JONI_TofShldPadtofCut_net");
+  // hempty_scaled2 = (TH1F*)hempty2->Clone("JONI_TofShldPadtofCut_net_empty_scaled");
+  // hempty_scaled2->Scale(scale_factor);
+  // hsub2 = (TH1F*)hfull2->Clone("JONI_TofShldPadtofCut_net_sub");
+  // hsub2->Add(hempty2, -1.0*scale_factor);
+  // hsub2->Rebin(rebin);
+
+  // TCanvas *c1 = new TCanvas("c1","tof+shld cut net (with rand sub)");
+  // //gPad->SetLogz();
+  // hsub->GetXaxis()->SetRangeUser(20,180);
+  // hsub->GetXaxis()->SetTitle("E [MeV]");
+  // hsub->GetXaxis()->SetLabelSize(0.045);
   // hsub->GetXaxis()->SetTitleSize(0.045);
-  // hsub->GetYaxis()->SetTitle("E [MeV]");
+  // hsub->GetYaxis()->SetRangeUser(0,550);
+  // hsub->GetYaxis()->SetTitle("counts");
   // hsub->GetYaxis()->SetTitleSize(0.045);
   // hsub->GetYaxis()->SetLabelSize(0.045);
-  // TCanvas *c1 = new TCanvas("c1","tof+shld cut & rndm+empty sub");
-  // gPad->SetLogz();
-  // hsub->Draw("colz");
+  // hsub->SetTitle("JONI_75#circ_tof+shld_cut_random_sub");
+  // hsub->SetLineColor(kBlack);
+  // hsub->Draw();
+  // hsub2->SetFillStyle(3003);
+  // hsub2->SetFillColor(kRed+1);
+  // hsub2->SetLineColor(kRed+1);
+  // hsub2->Draw("same");
 
+  // TLegend *l1 = new TLegend(0.5,0.6,0.85,0.75);
+  // l1->AddEntry(hsub,"no paddle cut");
+  // l1->AddEntry(hsub2,"with paddle TOF cut");
+  // l1->Draw();
+
+
+
+  TH2F *hfull, *hempty, *hempty_scaled, *hsub;
+  hfull = (TH2F*)ffull->Get("JONI_75_dEvPadTof2_net")->Clone("JONI_75_dEvPadTof_LD2");
+  hempty = (TH2F*)fempty->Get("JONI_75_dEvPadTof2_net")->Clone("JONI_75_dEvPadTof_Empty");
+  hempty_scaled = (TH2F*)hempty->Clone("JONI_75_dEvPadTof_Empty_Scaled");
+  hempty_scaled->Scale(scale_factor);
+  hsub = (TH2F*)hfull->Clone("JONI_75_dEvPadTof_Net");
+  hsub->Add(hempty, -1.0*scale_factor);
+  hsub->SetTitle("JONI (75#circ) shield+tof cut, random+empty sub, E>100 MeV");
+  hsub->GetXaxis()->SetTitle("paddle TOF");
+  hsub->GetXaxis()->SetTitleSize(0.045);
+  hsub->GetYaxis()->SetTitle("#DeltaE");
+  hsub->GetYaxis()->SetTitleSize(0.045);
+  //  hsub->GetYaxis()->SetLabelSize(0.045);
+  TCanvas *c1 = new TCanvas("c1","tof+shld cut & rndm+empty sub E>100MeV");
+  gPad->SetLogz();
+  hsub->Draw("colz");
+
+  TH2F *hfull2, *hempty2, *hempty_scaled2, *hsub2;
+  hfull2 = (TH2F*)ffull->Get("JONI_75_dEvPadTof3_net")->Clone("JONI_75_dEvPadTof2_LD2");
+  hempty2 = (TH2F*)fempty->Get("JONI_75_dEvPadTof3_net")->Clone("JONI_75_dEvPadTof2_Empty");
+  hempty_scaled2 = (TH2F*)hempty2->Clone("JONI_75_dEvPadTof2_Empty_Scaled");
+  hempty_scaled2->Scale(scale_factor);
+  hsub2 = (TH2F*)hfull2->Clone("JONI_75_dEvPadTof2_Net");
+  hsub2->Add(hempty2, -1.0*scale_factor);
+  hsub2->SetTitle("JONI (75#circ) shield+tof cut, random+empty sub, E=[80,100] MeV");
+  hsub2->GetXaxis()->SetTitle("paddle TOF");
+  hsub2->GetXaxis()->SetTitleSize(0.045);
+  hsub2->GetYaxis()->SetTitle("#DeltaE");
+  hsub2->GetYaxis()->SetTitleSize(0.045);
+  //  hsub->GetYaxis()->SetLabelSize(0.045);
+  TCanvas *c2 = new TCanvas("c2","tof+shld cut & rndm+empty sub E=[80,100] MeV");
+  gPad->SetLogz();
+  hsub2->Draw("colz");
 
 
 
@@ -259,6 +275,7 @@ void xlEmptySub_paddle(){
   hempty_scaled2->Write();
   hsub2->Write();
   c1->Write();
+  c2->Write();
   fout->Close();
 
 

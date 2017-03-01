@@ -67,7 +67,7 @@ void Replay_mixcut_hinda_paddle(){
   float tof_raw, tof, tof_pad, energy;
   while(database >> number >> name >> mode){
     if(number[0] == hash) continue; //the runs starting with # should be neglected 
-    if(mode != "deuterium") continue;//choose run mode "deuterium/empty"
+    if(mode != "empty") continue;//choose run mode "deuterium/empty"
     //if(atoi(number) < 180) continue;//start from this run
     //if(atoi(number) > 600) break;//end at this run
     printf("Current run number: %s  mode: %s\n", number, mode.c_str());
@@ -271,7 +271,7 @@ void Replay_mixcut_hinda_paddle(){
 
   // ================ save file =============================
 
-  TFile *outfile = new TFile("test_75_EcoreCutOnPaddle.root","recreate");
+  TFile *outfile = new TFile("test_75_EcoreCutOnPaddle_empty.root","recreate");
 
   hEVpadtof->Write();
   hdEVpadtof1->Write();
