@@ -53,8 +53,10 @@ void Project_HINDAfwd(){
   const Double_t shldCut[3] = {4500.0, 3300.0, 3000.0};
   const char *crBranch[3] = {"Q_0", "Q_7", "Q_3"};
   const char *shldBranch[3] = {"Q_8", "Q_15", "Q_11"};
-  const Double_t tofLow[3] = {81.0, 83.0, 91.0};
-  const Double_t tofHigh[3] = {91.0, 98.0, 104.0};
+  // const Double_t tofLow[3] = {81.0, 83.0, 91.0};
+  // const Double_t tofHigh[3] = {91.0, 98.0, 104.0};
+  const Double_t tofLow[3] = {0.0, 0.0, 0.0};
+  const Double_t tofHigh[3] = {170.0, 170.0, 170.0};
 
   //============== for calibration ==========================
   const Double_t E_beam = 65.; //MeV
@@ -81,18 +83,24 @@ void Project_HINDAfwd(){
   // // TH1F *hNet;
 
 
-  TH1F *hcore[3], *hcore_rand[3], *hcore_net[3];
+  TH1F *hcore[3], *hcore_rand[3], *hcore_net[3], *hcore_raw[3], *hcore_shldcut[3];
   TH2F *h2D[3];
   for(int l=0; l<3; l++){
     h2D[l] = new TH2F(Form("%s_2D",crNames[l].c_str()),
 		      Form("%s_%.0f#circ",crNames[l].c_str(),angles[l]),
-		      2000,0,200, 5000,0,500);
+		      500,0,500, 20000,0,20000);
     hcore[l] = new TH1F(Form("h%s",crNames[l].c_str()),
     			Form("%s(%.0f#circ),shield>%.0f,tof=[%.0f,%.0f]",crNames[l].c_str(), angles[l],shldCut[l],tofLow[l],tofHigh[l]),
     			1000,0,500);
     hcore_rand[l] = new TH1F(Form("h%s_rand",crNames[l].c_str()),
 			     Form("%s(%.0f#circ),shield>%.0f,tof=[100,170]",crNames[l].c_str(), angles[l],shldCut[l]),
 			     1000,0,500);
+    hcore_raw[l] = new TH1F(Form("h%s_raw",crNames[l].c_str()),
+			    Form("%s(%.0f#circ),raw,tof=[0,170]",crNames[l].c_str()),
+			    1000,0,500);
+    hcore_shldcut[l] = new TH1F(Form("h%s_shldcut",crNames[l].c_str()),
+				Form("%s(%.0f#circ),shield>%.0f",crNames[l].c_str(), angles[l],shldCut[l]),
+				1000,0,500);
   }
 
 
@@ -143,21 +151,29 @@ void Project_HINDAfwd(){
   flat_tree->SetBranchAddress(shldBranch[2], &Qshield[2]);
   flat_tree->SetBranchAddress("Q_14", &tof_raw);
   
-  // int events = flat_tree->GetEntries();
-  // for(int i=0; i<events; i++){
-  //   flat_tree->GetEntry(i);
-  //   tof = 0.025*tof_raw*0.5739-9.23582;
+  int events = flat_tree->GetEntries();
+  for(int i=0; i<events; i++){
+    flat_tree->GetEntry(i);
+    tof = 0.025*tof_raw*0.5739-9.23582;
 
-  //   for(int index=0; index<3; index++){    
-  //     energy = a[index]*Qcore[index]+b[index];
-  //     if(energy>20. && Qshield[index]<shldCut[index])
-  // 	h2D[index]->Fill(tof, energy);
-  //   }
+    for(int index=0; index<3; index++){    
+      energy = a[index]*Qcore[index]+b[index];
+      if(energy>20. )//&& Qshield[index]<shldCut[index])
+  	h2D[index]->Fill(energy, Qshield[index]);
+    }
 
-  // }
+  }
 
   
+  TCanvas *c1 = new TCanvas();
+  h2D[0]->Draw("colz");
+  TCanvas *c2 = new TCanvas();
+  h2D[1]->Draw("colz");  
+  TCanvas *c3 = new TCanvas();
+  h2D[2]->Draw("colz");  
 
+
+  /*
   TString shieldCut_s[3], coreCut_s[3], tofCut_s[3], var[3];
   TCut shieldCut[3], tofCut[3], coreCut[3];
   TString randcut_s = "(0.025*Q_14*0.5739-9.23582)>100&&(0.025*Q_14*0.5739-9.23582)<170";
@@ -169,13 +185,18 @@ void Project_HINDAfwd(){
     tofCut_s[l].Form("(0.025*Q_14*0.5739-9.23582)>%f&&(0.025*Q_14*0.5739-9.23582)<%f",tofLow[l], tofHigh[l]); tofCut[l]=tofCut_s[l];
     coreCut_s[l].Form("%s*%f>10",crBranch[l],a[l]);  coreCut[l]=coreCut_s[l];
 
-    flat_tree->Project(Form("h%s",crNames[l].c_str()), var[l], shieldCut[l]+tofCut[l]+coreCut[l]);
-    flat_tree->Project(Form("h%s_rand",crNames[l].c_str()), var[l], shieldCut[l]+randcut+coreCut[l]);
+    // flat_tree->Project(Form("h%s",crNames[l].c_str()), var[l], shieldCut[l]+tofCut[l]+coreCut[l]);
+    // flat_tree->Project(Form("h%s_rand",crNames[l].c_str()), var[l], shieldCut[l]+randcut+coreCut[l]);
+
+    //compare with and without shield cut
+    flat_tree->Project(Form("h%s_raw",crNames[l].c_str()), var[l], tofCut[l]+coreCut[l]);
+    flat_tree->Project(Form("h%s_shldcut",crNames[l].c_str()), var[l], shieldCut[l]+coreCut[l]);
+    flat_tree->Project(Form("h%s_rand",crNames[l].c_str()), var[l], randcut+coreCut[l]);
 
     //random subtraction
-    hcore_net[l] = (TH1F*)hcore[l]->Clone(Form("h%s_net",crNames[l].c_str()));
-    hcore_net[l]->SetTitle(Form("%s(%.0f#circ),net",crNames[l].c_str(),angles[l]));
-    scale[l] = (tofHigh[l]-tofLow[l])/(170.-100.);
+    hcore_net[l] = (TH1F*)hcore_raw[l]->Clone(Form("h%s_randsub",crNames[l].c_str()));
+    hcore_net[l]->SetTitle(Form("%s(%.0f#circ),no cut, random subtraction only",crNames[l].c_str(),angles[l]));
+    scale[l] = 170./70.;
     hcore_net[l]->Add(hcore_rand[l],-1.*scale[l]);
   }
 
@@ -210,12 +231,12 @@ void Project_HINDAfwd(){
 
 
   // //================ draw and save hists =================================
-  // TCanvas *c1 = new TCanvas();
-  // h2D[0]->Draw("colz");
-  // TCanvas *c2 = new TCanvas();
-  // h2D[1]->Draw("colz");  
-  // TCanvas *c3 = new TCanvas();
-  // h2D[2]->Draw("colz");  
+  TCanvas *c1 = new TCanvas();
+  h2D[0]->Draw("colz");
+  TCanvas *c2 = new TCanvas();
+  h2D[1]->Draw("colz");  
+  TCanvas *c3 = new TCanvas();
+  h2D[2]->Draw("colz");  
   // TCanvas *c4 = new TCanvas();
   // hcore[0]->Draw();
   // TCanvas *c5 = new TCanvas();
@@ -243,12 +264,21 @@ void Project_HINDAfwd(){
   // // h2D->GetYaxis()->SetLabelSize(0.05);
   // // h2D->Draw("color");
 
-  TFile *outfile = new TFile("hindaFWD.root","recreate");
+  */
+
+
+
+
+  TFile *outfile = new TFile("hindaFWD.root","update");
   for(int l=0; l<3; l++){
-    hcore[l]->Write();
-    hcore_rand[l]->Write();
-    hcore_net[l]->Write();
-    //h2D[l]->Write();
+    // hcore[l]->Write();
+    // hcore_rand[l]->Write();
+    // hcore_net[l]->Write();
+    h2D[l]->Write();
+    // hcore_raw[l]->Write();
+    // hcore_shldcut[l]->Write();
+    // hcore_net[l]->Write("",TObject::kOverwrite);
+
   }
 
   outfile->Close();
