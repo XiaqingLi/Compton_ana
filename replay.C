@@ -10,8 +10,6 @@
   const string pos[nHINDA] = {"D", "D", "L", "D", "R", "R", "L", "L"};
   
   const Double_t crCut[nHINDA] = {9, 11.5, 12, 8.5, 21, 12.5, 17, 13}; 
-  // const Double_t shldCut[nHINDA] = {3000.0, 14000.0, 3500.0, 4000.0,
-  // 				    3000.0, 2500.0, 2000.0, 3000.0}; //Q_i
   const Double_t randLow1[nHINDA] = {0, 0, 0, 0, 0, 0, 0, 0};
   const Double_t randHigh1[nHINDA] = {0, 0, 20, 0, 0, 0, 0, 0};
   const Double_t randLow2[nHINDA] = {120, 90, 0, 155, 148, 140, 130, 120};
@@ -25,11 +23,8 @@
   				    3000.0, 1900.0, 1500.0, 2000.0}; //Q_i
 
   const Double_t tofShift[5] = {8.5, 10.5, 1.9, 1.0, 0};
-  // const Double_t tofCenter[nHINDA] = {94.5, 64.5, 118, 111.5, 106., 87, 105.5, 95}; //_s
-  const Double_t tofCenter[nHINDA] = {94, 64.5, 118, 111.5, 106, 86.5, 105, 95}; //_ss
-  const Double_t tofWidth[nHINDA] = {14, 11, 14, 12, 16, 13, 11, 9}; // _ss
-  // const Double_t tofWidth[nHINDA] = {14, 11, 12, 10, 15, 13, 10, 9}; // _s
-  // const Double_t tofWidth[nHINDA] = {14, 11, 14, 14, 15, 13, 10, 9}; // original
+  const Double_t tofCenter[nHINDA] = {94, 64.5, 118, 111.5, 106, 86.5, 105, 95};
+  const Double_t tofWidth[nHINDA] = {14, 11, 14, 12, 16, 13, 11, 9};
   Double_t tofplus_ns = 0;
 
   Double_t tofCutLow[nHINDA], tofCutHigh[nHINDA];
@@ -37,7 +32,7 @@
   float Qshield[nHINDA];
   float tof_raw, tofpad_raw, tof, energy, delta;
 
-  //============== calibration ==========================
+  //============== set energy calibration parameters ==============
   const Double_t kY1 = 0.0; //MeV
   const Double_t kX1 = 0.0; //0.001*Q_i
   const Double_t E_beam = 84.0; //MeV, incident photon energy
@@ -48,7 +43,7 @@
   }
   const Double_t kX2[nHINDA] = {5000, 4400, 3600, 4100,
   				2900, 3100, 2100, 6800};// Q_i
-
+	
   Double_t m_cal_[nHINDA];
   Double_t b_cal_[nHINDA];
   for(int i=0; i<nHINDA; i++) {
@@ -74,7 +69,6 @@
   TH2F *hEcr_tof_shldCut[nHINDA];
   TH2F *hEcr_Eshld[nHINDA];
   TH2F *hEcr_Eshld_tofcut[nHINDA];
-
 
   for(int i=0; i<nHINDA; i++){ 
     hcore_raw[i] = new TH1F(Form("%s_Raw",crNames[i].c_str()),
@@ -139,8 +133,6 @@
 
 
 
-
-
   // ======================== fill histograms ====================================
   ifstream database("/var/phy/project/mepg/xl79/helium_84MeV/run_database.dat");
   char number[20];
@@ -161,7 +153,6 @@
     // printf("Current run number: %s  mode: %s\n", number, mode.c_str());
     // cout<<number<<"\t"<<filename<<"\t"<<endl;
 
-
     if(runnumber>=928 && runnumber<932)
       delta = tofShift[0];
     else if(runnumber>=932 && runnumber<941)
@@ -174,7 +165,6 @@
       delta = tofShift[4];
     else 
       continue;
-
 
     TFile *infile = new TFile(Form("/var/phy/project/mepg/xl79/helium_84MeV/root_files/%s",filename));
     tree = (TTree*)infile->Get("flat_tree");
@@ -198,7 +188,6 @@
     tree->SetBranchAddress("Q_15", &Qshield[7]);// STEVE
  
 
-
     int events = tree->GetEntries();
     cout<<"current run: "<<runnumber<<"\t total events: "<<events<<endl;
     for(int i=0; i<events; i++){
@@ -213,8 +202,7 @@
       for(int j=0; j<nHINDA; j++){
 	if(runnumber<952 && j==2) continue;
 
-
-	energy = Qcore[j]*m_cal_[j]+b_cal_[j]; //energy calibratio
+	energy = Qcore[j]*m_cal_[j]+b_cal_[j]; //do energy calibration
 
 	tofCutLow[j] = tofCenter[j]+delta-(tofWidth[j]+tofplus_ns)/2.0;
 	tofCutHigh[j] = tofCenter[j]+delta+(tofWidth[j]+tofplus_ns)/2.0;
@@ -224,7 +212,6 @@
 	hcore[j]->Fill(energy);
 
 	if(energy>kY2[j])
-	// if((j==5 || j==7) && energy>kY2[j])
 	  tof = tof-(energy-kY2[j])/coef[j];
 
 	if(energy>crCut[j]){
@@ -245,33 +232,24 @@
 	      hcore_net[j]->Fill(energy); 
 	    }//**************fill prompt events
 
-
 	    if((tof>randLow1[j] && tof<randHigh1[j])||(tof>randLow2[j] && tof<randHigh2[j])){ 
 	      hcore_rand[j]->Fill(energy); 
 	    }//**************fill random events
-
 	  }//shield cut
-
 	}//core threshold
-
       }//loop over HINDA
-
     }//loop over events
-    
   }//loop over while
   database.close();
 
 
-
-  //do random subtraction
-
+  // =============== do random subtraction ==================
   for(int j=0; j<nHINDA; j++){
      hcore_net[j]->Add(hcore_rand[j],-1.*tofWidth[j]/((randHigh1[j]-randLow1[j])+(randHigh2[j]-randLow2[j])));
   }
 
 
   // ======================== save file ===================
-
   TFile *fout = new TFile("Empty.root","recreate");
   for(int i=0; i<nHINDA; i++){
     hcore_raw[i]->Write();
@@ -288,12 +266,6 @@
     hEcr_Eshld[i]->Write();
     hEcr_Eshld_tofcut[i]->Write();
   }
-
-
-  // c0->Write();
-  // c1->Write();
-  // c2->Write();
-  // c3->Write();
 
   fout->Close();
 
