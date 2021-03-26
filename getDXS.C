@@ -16,7 +16,6 @@ void getDXS(){
   const Double_t E_low[8] = {74, 74, 72, 72, 72, 72, 72, 74}; //for 84 MeV analysis
 
 
-
   TH1F *hconv[kNCores], *hbg_sub[kNCores], *htotal[kNCores];
   TF1 *exp_bg[kNCores];
   Double_t fit_N0[kNCores], fit_N1[kNCores], data_N1[kNCores], data_err[kNCores], yield[kNCores], yield_err[kNCores];
@@ -51,7 +50,6 @@ void getDXS(){
     effSolAng[i] = 4*TMath::Pi()*hconv[i]->Integral(bin_low, bin_high)*gr_mean->Eval(i+1.0)/(gr_scale->Eval(i+1.0)*N_sim);
 
 //    cout<<effSolAng[i]*1000<<endl;
-
     //////Equivalently:
     // yield[i] = hbg_sub[i]->IntegralAndError(sum_low[i], sum_high[i], yield_err[i]);
     // effSolAng[i] = 4*TMath::Pi()*hconv[i]->Integral(sum_low[i], sum_high[i])/(gr_scale->Eval(i+1.0)*N_sim);
@@ -69,12 +67,9 @@ void getDXS(){
     cout<<dxs_err[i]<<"\n";
   cout<<endl;
 
-
-
   TGraphErrors *gr = new TGraphErrors(kNCores, kCoreAngle, dxs, 0, dxs_err);
 
-
-
+	
   //////////////// separate phi angles //////////////
   Double_t angle[3] = {55.0, 90.0, 125.0};
   Double_t angle2[2] = {90,125};
@@ -84,9 +79,6 @@ void getDXS(){
   Double_t dxs_stat_R[2] = {dxs_err[5], dxs_err[4]};
   Double_t dxs_stat_L[3] = {dxs_err[7], dxs_err[6], dxs_err[2]};
   Double_t dxs_stat_D[3] = {dxs_err[0], dxs_err[1], dxs_err[3]};
-  // Double_t dxs_syst_R[2] = {1.8, 2.5}; //total syst
-  // Double_t dxs_syst_L[3] = {2.0, 1.6, 2.4}; //total syst
-  // Double_t dxs_syst_D[3] = {2.9, 1.6, 2.5}; //total syst
   Double_t dxs_syst_R[2] = {1.0, 1.2}; //point-to-point syst
   Double_t dxs_syst_L[3] = {1.1, 1.0, 1.2}; //point-to-point syst
   Double_t dxs_syst_D[3] = {2.2, 0.7, 1.1}; //point-to-point syst
@@ -126,7 +118,6 @@ void getDXS(){
   cout<<endl;
 
 
-
   cout<<"\n55deg\t"<<weighted_dxs[0]<<"\t"<< weighted_err[0]<<"\t"<<weighted_err[0]/weighted_dxs[0]<<endl;
   cout<<"90deg\t"<<weighted_dxs[1]<<"\t"<< weighted_err[1]<<"\t"<<weighted_err[1]/weighted_dxs[1]<<endl;
   cout<<"125deg\t"<<weighted_dxs[2]<<"\t"<< weighted_err[2]<<"\t"<<weighted_err[2]/weighted_dxs[2]<<endl;
@@ -156,15 +147,13 @@ void getDXS(){
   TGraphErrors *gr_Lund = new TGraphErrors(3, Lund_angle, Lund_dxs, 0, Lund_error);
 
 
-  ////////////////////////   draw dxs   //////////////////////////////////
+	
+  ///////////////////////// plot graph ////////////////////////
   TCanvas *c1 = new TCanvas("cDXS","cDXS",900,700);
   gPad->SetBottomMargin(0.13);
   // gPad->SetLeftMargin(0.13);
   // gPad->SetRightMargin(0.05);
   //  c1->SetGrid();
-
-
-  ///////////////////////// plot graph ////////////////////////
   gr->SetTitle("");
   gr->GetXaxis()->SetTitle("#theta_{lab} (deg)");
   gr->GetXaxis()->SetLimits(15, 165);
@@ -226,7 +215,7 @@ void getDXS(){
   // gr_weighted->Draw("psame");
 
   
-  //////////////////// plot systematic errors ///////////
+  //////////////////// plot systematic errors //////////////////
   TGraphErrors *sys_out = new TGraphErrors();
   TGraphErrors *sys_in_right = new TGraphErrors();
   TGraphErrors *sys_in_left = new TGraphErrors();
