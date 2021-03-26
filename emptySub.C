@@ -5,17 +5,15 @@
 				  "KRISTA", "LINDA", "ROBERTA", "SUSAN"};
   const string shldNames[nShields] = {"ANDY", "BOBBY", "CARL", "JACK",
 				      "KEVIN", "LARRY", "REGGIE", "STEVE"};
-  // const double angles[nCores] = {40.0, 159.0, 125.0, 75.0, 
-  // 				 145.0, 110.0, 90.0, 55.0};
   const double angles[nCores] = {55.0, 90.0, 125.0, 125.0, 
 				 125.0, 90.0, 90.0, 55.0};
   const string pos[nCores] = {"D", "D", "L", "D", "R", "R", "L", "L"};
 
-  //****change input and output file names here!****
+  //**** change input and output file names here! ****
   TString infile_full = "Full.root";
   TString infile_empty = "Empty.root";
   TString outfile = "Net.root";
-  //************************************************
+  //**************************************************
 
 
   //calculate scale factor
@@ -49,16 +47,17 @@
   Float_t kFactorError;
   Double_t scale_factor, scale_factor_CINDY;
   Float_t flux, flux_err;
+  ofstream flux_out("flux.dat"); //output file for flux information
 
+
+	
+  //process full target runs
   FILE *scaler = fopen("/var/phy/project/mepg/xl79/helium_84MeV/compton_scalers","r");
   ifstream database("/var/phy/project/mepg/xl79/helium_84MeV/run_database.dat");
 
-
-
-  ofstream flux_out("flux.dat");
   while(database >> number >> name >> mode >> helicity){
     if(number[0] == hash) continue; //the runs starting with # should be neglected 
-    if(mode != "helium_full") continue;//choose run mode
+    if(mode != "helium_full") continue; //choose run mode
     printf("\n");
     printf("Run#%d\n",atoi(number));
  
@@ -104,7 +103,7 @@
       }//if line starts with "Run"
     }//while loop scaler
 
-
+	  
     //calculate flux for every run and add up n_full
     gROOT->ProcessLine(".L /var/phy/project/mepg/xl79/helium_84MeV/fluxcal.C");
     if(atoi(number)>=928 && atoi(number)<=951) {
@@ -141,10 +140,7 @@
 
 
 
-
-
-
-
+  //process empty target runs
   FILE *scaler = fopen("/var/phy/project/mepg/xl79/helium_84MeV/compton_scalers","r");
   ifstream database("/var/phy/project/mepg/xl79/helium_84MeV/run_database.dat");
   while(database >> number >> name >> mode >> helicity){
@@ -195,7 +191,7 @@
       }//if line starts with "Run"
     }//while loop scaler
 
-
+	  
     //calculate flux for every run and add up n_empty
     gROOT->ProcessLine(".L /var/phy/project/mepg/xl79/helium_84MeV/fluxcal.C");
     if(atoi(number)>=928 && atoi(number)<=951) {
@@ -226,7 +222,8 @@
   flux_out.close();
 
 
-  // // flux calculation code from Rob
+	
+  // //flux calculation code from Rob
   // gROOT->ProcessLine(".L fluxcal.C");
   // Double_t scale_factor = (Double_t)full_5pad / empty_5pad;
   // cout << "5pad: full / empty = " << scale_factor << endl;
@@ -257,9 +254,11 @@
   cout << "\nn_full_CINDY / n_empty = " << scale_factor_CINDY << endl;
   cout<<"N_gamma_CINDY = "<<n_full_CINDY<<endl;
   cout<<"sigma(N_gamma_CINDY) = "<<n_full_err_CINDY<<endl;
+  //*******************************************************
 
 
-
+	
+  //subtract empty target contributions from full target data
   TFile *ffull = new TFile(infile_full);
   TFile *fempty = new TFile(infile_empty);
 
@@ -304,13 +303,6 @@
     zero[i]->SetLineColor(kBlack);
     zero[i]->Draw("same");
 
-
-    // zore[i] = new TLine(25.0, 0.0, 100.0, 0.0);
-    // zore[i]->SetLineWidth(2);
-    // zore[i]->SetLineStyle(4);
-    // zore[i]->SetLineColor(kViolet);
-    // zore[i]->Draw("same");
-
     c2->cd(i+1);
     hfull[i]->SetLineColor(kBlack);
     hfull[i]->GetXaxis()->SetTitle("Energy [MeV]");
@@ -330,10 +322,6 @@
     zero[i]->SetLineStyle(2);
     zero[i]->SetLineColor(kBlack);
     zero[i]->Draw("same");
-
-
- 
-
   }
 
 
