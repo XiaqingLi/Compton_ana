@@ -44,13 +44,8 @@ TString infile = "Net.root";
 const TString coreNames[nHINDA] = {"ALAINA","BROOKE","CINDY","JONI","KRISTA","LINDA","ROBERTA","SUSAN"};
 const Double_t angles[nHINDA] = {55.0, 90.0, 125.0, 125.0, 125.0, 90.0, 90.0, 55.0};
 
-
-
-
-// const Double_t kEfit_low[nHINDA] = {36, 27, 70/*64*/, 70/*64*/, 70/*64*/, 27, 27, 36};
-const Double_t kEfit_low[nHINDA] = {34, 26, 69/*64*/, 69/*64*/, 69/*64*/, 26, 26, 35};
+const Double_t kEfit_low[nHINDA] = {34, 26, 69, 69, 69, 26, 26, 35};
 const Double_t kEfit_high[nHINDA] = {109, 110, 109, 109, 109, 109, 109, 109};
-// Double_t mean[nHINDA] = {0.97, 0.97, 0.96, 0.97, 0.98, 0.99, 0.9, 0.98};
 
 Int_t rebin = 1;
 const Double_t Emax = 145.;
@@ -71,7 +66,6 @@ Double_t sigma_r[8], scale_r[8], mean_r[8], exp_scale_r[8], exp_decay_r[8], cons
 
 TFile *file = new TFile(infile);
 TFile *gfile = new TFile("/home/xl79/mepg/git_Compton/4He_Oct2017/HindaSim_revisedMode7_D16mm_EM_QGSP_BERT_HP_5e7.root");
-// TFile *gfile = new TFile("../HindaSim_LHe_Compton_5e7.root");
 TFile *fout = new TFile(outfile, "recreate");
 
 
@@ -111,40 +105,21 @@ int main(){
     ROOT::Math::Functor f(&GetChi2,6);//Fitting function
     minuit->SetFunction(f);
 
-
-
-    // if(l==7){
-    //   minuit->SetVariable(0,"scale", 0.01, 0.0001);
-    //   minuit->SetVariableLimits(0,0,1);
-    //   minuit->SetVariable(1,"sigma", 0.1, 0.0001);
-    //   minuit->SetVariableLimits(1,0,1);
-    //   minuit->SetFixedVariable(1,"sigma", 0.01);
-    //   // minuit->SetFixedVariable(2,"mean", mean[l]);
-    //   minuit->SetVariable(2,"mean", mean[l], 0.001);
-    //   minuit->SetVariable(3,"exp_scale", 0.05, 0.0001);  
-    //   minuit->SetVariable(4,"exp_decay", 0.01, 0.0001);
-    //   minuit->SetVariable(5,"const", 50.0, 0.0001);
-    // }
     if(l>=2 && l<=4){
       minuit->SetVariable(0,"scale", 0.01, 0.0001);
       // minuit->SetVariableLimits(0,0,1);
       minuit->SetVariable(1,"sigma", 0.25, 0.0001);
       // minuit->SetVariableLimits(1,0.01,1);
-      // minuit->SetFixedVariable(1,"sigma", 0.2);
-      // minuit->SetFixedVariable(2,"mean", mean[l]);
       minuit->SetVariable(2,"mean", 0.95, 0.001);
       minuit->SetFixedVariable(3,"exp_scale", 0);  
       minuit->SetFixedVariable(4,"exp_decay", 0);
       minuit->SetVariable(5,"const", 20.0, 0.0001);
-      // minuit->SetFixedVariable(5,"const", 15);
     }
     else{
       minuit->SetVariable(0,"scale", 0.01, 0.0001);
       // minuit->SetVariableLimits(0,0,1);
       minuit->SetVariable(1,"sigma", 0.03, 0.0001);
       // minuit->SetVariableLimits(1,0.01,1);
-      // minuit->SetFixedVariable(1,"sigma", 0.01);
-      // minuit->SetFixedVariable(2,"mean", mean[l]);
       minuit->SetVariable(2,"mean", 0.95, 0.001);
       minuit->SetVariable(3,"exp_scale", 0.05, 0.0001);  
       minuit->SetVariable(4,"exp_decay", 0.01, 0.0001);
@@ -206,8 +181,6 @@ int main(){
     c1->cd(l+1);
     hdata->SetLineColor(kBlack);
     hdata->GetXaxis()->SetRangeUser(25, 110);
-    // if(angles[l]>89)
-    //   hdata->GetXaxis()->SetRangeUser(37, Emax);
     hdata->GetXaxis()->SetLabelSize(0.045);
     hdata->GetXaxis()->SetTitle("E [MeV]");
     hdata->GetXaxis()->SetTitleSize(0.045);
@@ -230,12 +203,6 @@ int main(){
     exp_bg[l]->SetLineColor(kGreen);
     exp_bg[l]->SetLineWidth(2);
     exp_bg[l]->Draw("same");
-    // hbg[l]->SetLineColor(kMagenta);
-    // hbg[l]->Draw("same");
-    // TLine *const_bg = new TLine(30,result[5],Emax,result[5]);
-    // const_bg->SetLineWidth(2);
-    // const_bg->SetLineColor(kGreen);
-    // const_bg->Draw();
     hbg_sub[l]->SetLineColor(kMagenta);
     hbg_sub[l]->Draw("same");
 
