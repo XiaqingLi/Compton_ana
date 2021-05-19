@@ -40,7 +40,7 @@ const Double_t Hshift = 0;
 const Int_t kRebin = 4;
 Double_t binWidth = 0.2*kRebin;
 TString outfile = "Fit.root";
-TString infile = "Net.root";
+TString infile = "/home/xl79/mepg/helium_84MeV/Net.root";
 const TString coreNames[nHINDA] = {"ALAINA","BROOKE","CINDY","JONI","KRISTA","LINDA","ROBERTA","SUSAN"};
 const Double_t angles[nHINDA] = {55.0, 90.0, 125.0, 125.0, 125.0, 90.0, 90.0, 55.0};
 
