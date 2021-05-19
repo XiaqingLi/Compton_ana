@@ -10,8 +10,8 @@
   const string pos[nCores] = {"D", "D", "L", "D", "R", "R", "L", "L"};
 
   //**** change input and output file names here! ****
-  TString infile_full = "Full.root";
-  TString infile_empty = "Empty.root";
+  TString infile_full = "/var/phy/project/mepg/xl79/helium_84MeV/Full.root";
+  TString infile_empty = "/var/phy/project/mepg/xl79/helium_84MeV/Empty.root";
   TString outfile = "Net.root";
   //**************************************************
 
