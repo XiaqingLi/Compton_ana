@@ -40,7 +40,7 @@ const Double_t Hshift = 0;
 const Int_t kRebin = 4;
 Double_t binWidth = 0.2*kRebin;
 TString outfile = "Fit.root";
-TString infile = "/home/xl79/mepg/helium_84MeV/Net.root";
+TString infile = "/var/phy/project/mepg/xl79/helium_84MeV/Net.root";
 const TString coreNames[nHINDA] = {"ALAINA","BROOKE","CINDY","JONI","KRISTA","LINDA","ROBERTA","SUSAN"};
 const Double_t angles[nHINDA] = {55.0, 90.0, 125.0, 125.0, 125.0, 90.0, 90.0, 55.0};
 
@@ -65,7 +65,7 @@ Double_t chiPerDof[8];
 Double_t sigma_r[8], scale_r[8], mean_r[8], exp_scale_r[8], exp_decay_r[8], const_r[8],sigma_err_r[8], scale_err_r[8], mean_err_r[8], exp_scale_err_r[8], exp_decay_err_r[8], const_err_r[8];
 
 TFile *file = new TFile(infile);
-TFile *gfile = new TFile("/home/xl79/mepg/git_Compton/4He_Oct2017/HindaSim_revisedMode7_D16mm_EM_QGSP_BERT_HP_5e7.root");
+TFile *gfile = new TFile("/var/phy/project/mepg/xl79/git_Compton/4He_Oct2017/HindaSim_revisedMode7_D16mm_EM_QGSP_BERT_HP_5e7.root");
 TFile *fout = new TFile(outfile, "recreate");
 
 
